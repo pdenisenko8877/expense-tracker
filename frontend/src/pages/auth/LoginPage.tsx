@@ -1,15 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { LoginForm } from 'src/modules/auth/components/LoginForm';
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
+
   const handleLogin = () => {
-    console.log('Logged in successfully');
+    navigate('/login');
   };
 
   return (
     <div>
       <LoginForm onSubmit={handleLogin} />
-      <Link to="/register">Don't have an account? Register here.</Link>
+      <Link to="/register">Ще немає акаунту? Зареєструватися</Link>
     </div>
   );
 };

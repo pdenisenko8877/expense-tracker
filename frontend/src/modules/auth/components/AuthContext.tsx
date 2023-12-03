@@ -1,20 +1,22 @@
 import { createContext, useContext, useState, ReactNode, FC } from 'react';
 
+import { Token } from 'src/modules/app/types';
+
 interface AuthContextProps {
   children: ReactNode;
 }
 
 interface AuthContextValue {
-  token: string | null;
-  setToken: (token: string | null) => void;
+  token: Token;
+  setToken: (token: Token) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider: FC<AuthContextProps> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+  const [token, setToken] = useState<Token>(localStorage.getItem('token'));
 
-  const saveToken = (token: string | null) => {
+  const saveToken = (token: Token) => {
     setToken(token);
     if (token) {
       localStorage.setItem('token', token);
