@@ -1,9 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import { Button, Grid, Stack } from '@mui/material';
+import { Button, Grid, Stack, Paper, Typography } from '@mui/material';
 import { DatePicker, Text } from 'src/modules/ui/forms';
 
 import { categoryOptions, currencyOptions } from '../constants';
@@ -62,41 +62,46 @@ export const ExpensesFilterForm = ({ expenses, onSubmit, onReset }: ExpenseFormP
   }, [onReset, reset]);
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Text
-            label="Валюта"
-            name="selectedCurrency"
-            control={control}
-            select
-            options={currencyOptions}
-          />
+    <Paper elevation={0} sx={{ p: 3, mb: 3 }}>
+      <Typography variant="h3" mb={3}>
+        Фільтрувати
+      </Typography>
+      <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Text
+              label="Валюта"
+              name="selectedCurrency"
+              control={control}
+              select
+              options={currencyOptions}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Text
+              label="Категорія"
+              name="selectedCategory"
+              control={control}
+              select
+              options={categoryOptions}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <DatePicker label="Початкова дата" name="startDate" control={control} />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <DatePicker label="Кінцева дата" name="endDate" control={control} />
+          </Grid>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
-          <Text
-            label="Категорія"
-            name="selectedCategory"
-            control={control}
-            select
-            options={categoryOptions}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <DatePicker label="Початкова дата" name="startDate" control={control} />
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <DatePicker label="Кінцева дата" name="endDate" control={control} />
-        </Grid>
-      </Grid>
-
-      <Stack direction="row" spacing={2} mt={2}>
-        <Button onClick={handleFormReset}>Скинути</Button>
-        <Button type="submit">Фільтрувати</Button>
-      </Stack>
-    </form>
+        <Stack direction="row" spacing={3} mt={3}>
+          <Button onClick={handleFormReset}>Скинути</Button>
+          <Button type="submit">Фільтрувати</Button>
+        </Stack>
+      </form>
+    </Paper>
   );
 };

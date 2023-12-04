@@ -58,44 +58,46 @@ export const ExpensesForm = ({ token }: ExpenseFormProps) => {
   );
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Text label="Введіть витрати" name="amount" type="number" control={control} required />
+    <Box py={1}>
+      <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Text label="Введіть витрати" name="amount" type="number" control={control} required />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Text
+              label="Валюта"
+              name="currency"
+              control={control}
+              required
+              select
+              options={currencyOptions}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Text
+              label="Категорія"
+              name="category"
+              control={control}
+              required
+              select
+              options={categoryOptions}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <DatePicker label="Дата" name="date" control={control} required />
+          </Grid>
         </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <Text
-            label="Валюта"
-            name="currency"
-            control={control}
-            required
-            select
-            options={currencyOptions}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <Text
-            label="Категорія"
-            name="category"
-            control={control}
-            required
-            select
-            options={categoryOptions}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <DatePicker label="Дата" name="date" control={control} required />
-        </Grid>
-      </Grid>
-
-      <Box mt={2}>
-        <Button type="submit" disabled={formState.isSubmitting}>
-          Зберегти
-        </Button>
-      </Box>
-    </form>
+        <Box pt={3}>
+          <Button type="submit" disabled={formState.isSubmitting}>
+            Зберегти
+          </Button>
+        </Box>
+      </form>
+    </Box>
   );
 };

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Typography, Box } from '@mui/material';
+import { Button, Typography, Box, Stack } from '@mui/material';
 
 import { Text, Password } from 'src/modules/ui/forms';
 import { useMessages } from 'src/modules/messages/hooks/useMessages';
@@ -59,16 +59,19 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
   );
 
   return (
-    <Box py={2}>
+    <Box p={2}>
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-        <Typography variant="h5">Вхід</Typography>
+        <Typography variant="h3" mb={3}>
+          Вхід
+        </Typography>
+        <Stack spacing={3}>
+          <Text label="Ел. пошта" name="email" type="email" control={control} required />
+          <Password label="Пароль" name="password" type="password" control={control} required />
+        </Stack>
 
-        <Text label="Ел. пошта" name="email" type="email" control={control} required />
-        <Password label="Пароль" name="password" type="password" control={control} required />
-
-        <Button type="submit" variant="contained" color="primary">
-          Увійти
-        </Button>
+        <Box mt={3}>
+          <Button type="submit">Увійти</Button>
+        </Box>
       </form>
     </Box>
   );

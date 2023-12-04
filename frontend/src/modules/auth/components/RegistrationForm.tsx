@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Typography, Box } from '@mui/material';
+import { Button, Typography, Box, Stack } from '@mui/material';
 
 import { Text, Password } from 'src/modules/ui/forms';
 import { useMessages } from 'src/modules/messages/hooks/useMessages';
@@ -57,24 +57,29 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
   };
 
   return (
-    <Box py={2}>
+    <Box p={2}>
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-        <Typography variant="h5">Реєстрація</Typography>
-
-        <Text label="Ім'я" name="firstname" control={control} required />
-        <Text label="Прізвище" name="lastname" control={control} required />
-        <Text label="Ел. пошта" name="email" type="email" control={control} required />
-        <Password
-          label="Придумайте пароль"
-          name="password"
-          type="password"
-          control={control}
-          required
-        />
-
-        <Button type="submit" variant="contained" color="primary">
+        <Typography variant="h3" mb={3}>
           Реєстрація
-        </Button>
+        </Typography>
+
+        <Stack spacing={3}>
+          <Text label="Ім'я" name="firstname" control={control} required />
+          <Text label="Прізвище" name="lastname" control={control} required />
+          <Text label="Ел. пошта" name="email" type="email" control={control} required />
+          <Password
+            label="Придумайте пароль"
+            name="password"
+            type="password"
+            control={control}
+            required
+          />
+        </Stack>
+        <Box mt={3}>
+          <Button type="submit" variant="contained" color="primary">
+            Реєстрація
+          </Button>
+        </Box>
       </form>
     </Box>
   );

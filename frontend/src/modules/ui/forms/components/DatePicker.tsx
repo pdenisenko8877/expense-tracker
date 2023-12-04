@@ -18,7 +18,7 @@ export const DatePicker = ({
   control,
   label,
   required,
-  margin = 'normal',
+  margin = 'none',
   placeholder,
 }: DatePickerProps) => {
   return (

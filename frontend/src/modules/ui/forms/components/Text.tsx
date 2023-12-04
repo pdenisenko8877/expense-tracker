@@ -14,7 +14,7 @@ export const Text = ({
   control,
   label,
   type,
-  margin = 'normal',
+  margin = 'none',
   required,
   multiline,
   maxRows = 10,

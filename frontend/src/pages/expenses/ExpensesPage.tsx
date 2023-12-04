@@ -5,24 +5,24 @@ import { Box, Button, Typography } from '@mui/material';
 
 import { useAuth } from 'src/modules/auth/components/AuthContext';
 import { Loader } from 'src/modules/ui/loader';
-import { ExpensesForm } from 'src/modules/expenses/components/ExpensesForm';
-import { ExpensesFormEdit } from 'src/modules/expenses/components/ExpensesFormEdit';
+import { ExpensesFormModal } from 'src/modules/expenses/components/ExpensesFormModal';
 import { ExpensesList } from 'src/modules/expenses/components/ExpensesList';
 import { ExpensesFilterForm } from 'src/modules/expenses/components/ExpensesFilterForm';
 import { Expense } from 'src/modules/expenses/interfaces';
 import { filterByCurrency, filterByDate } from 'src/modules/expenses/utils';
 import { fetchExpenses, deleteExpense } from 'src/modules/expenses/hooks/crud';
 import { useMessages } from 'src/modules/messages/hooks/useMessages';
+import { useModal } from 'src/modules/ui/modal';
 
 export const ExpensesPage = () => {
   const { setToken, token } = useAuth();
   const queryClient = useQueryClient();
   const { show } = useMessages();
+  const { openModal, open, onClose } = useModal();
 
   const handleLogout = useCallback(() => setToken(null), [setToken]);
 
   const [isLoading, seIsLoading] = useState<boolean>(true);
-  const [expensesId, setExpensesId] = useState<number>();
 
   // Use React Query to fetch all expenses
   const { data, isError } = useQuery(['allExpenses'], () => fetchExpenses(token));
@@ -68,10 +68,6 @@ export const ExpensesPage = () => {
     [deleteExpenseMutation],
   );
 
-  const handleEditId = useCallback((id: number) => {
-    setExpensesId(id);
-  }, []);
-
   const handleFiltered = useCallback((filteredExpenses: Expense[]) => {
     setExpenses(filteredExpenses);
   }, []);
@@ -87,17 +83,20 @@ export const ExpensesPage = () => {
 
   return (
     <Box px={5} py={3}>
-      <Typography variant="h3">Головна сторінка</Typography>
-      <Button onClick={handleLogout}>Вийти</Button>
+      <Box pb={3}>
+        <Typography variant="h3">Головна сторінка</Typography>
+        <Button onClick={handleLogout}>Вийти</Button>
+      </Box>
 
-      <ExpensesForm token={token} />
-
-      {expensesId && <ExpensesFormEdit token={token} editId={expensesId} />}
+      <Box pb={3}>
+        <Button onClick={openModal}>Додати витрати</Button>
+      </Box>
+      <ExpensesFormModal open={open} onClose={onClose} token={token} />
 
       <Loader isLoading={isLoading}>
         <ExpensesFilterForm expenses={data} onSubmit={handleFiltered} onReset={handleReset} />
 
-        <ExpensesList expenses={expenses} onDelete={handleDelete} onEdit={handleEditId} />
+        <ExpensesList expenses={expenses} onDelete={handleDelete} token={token} />
       </Loader>
     </Box>
   );

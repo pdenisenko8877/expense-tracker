@@ -71,11 +71,11 @@ export const ExpensesFormEdit = ({ editId, token }: ExpenseFormProps) => {
   );
 
   return (
-    <>
+    <Box py={1}>
       <Loader isLoading={isLoading} />
 
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <Text label="Введіть витрати" name="amount" type="number" control={control} required />
           </Grid>
@@ -107,12 +107,12 @@ export const ExpensesFormEdit = ({ editId, token }: ExpenseFormProps) => {
           </Grid>
         </Grid>
 
-        <Box mt={2}>
+        <Box pt={3}>
           <Button type="submit" disabled={formState.isSubmitting}>
             Редагувати
           </Button>
         </Box>
       </form>
-    </>
+    </Box>
   );
 };

@@ -5,21 +5,34 @@ import { Stack, IconButton, List, ListItem, ListItemText, Typography, Grid } fro
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
+import { useModal } from 'src/modules/ui/modal';
+import { Token } from 'src/modules/app/types';
+
 import { Expense } from '../interfaces';
 import { chartBackgroundColor } from '../constants';
 import { mapCategories } from '../utils';
+import { ExpensesFormEditModal } from './ExpensesFormEditModal';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface ExpenseListProps {
   expenses: Expense[];
-  onEdit?: (id: number) => void;
+  token: Token;
   onDelete?: (id: number) => void;
 }
 
-export const ExpensesList = ({ expenses, onEdit, onDelete }: ExpenseListProps) => {
-  const handleEdit = useCallback((id: number) => () => onEdit && onEdit(id), [onEdit]);
+export const ExpensesList = ({ expenses, token, onDelete }: ExpenseListProps) => {
+  const [expensesId, setExpensesId] = useState<number>();
+  const { openModal, open, onClose } = useModal();
   const handleDelete = useCallback((id: number) => () => onDelete && onDelete(id), [onDelete]);
+
+  const handleEdit = useCallback(
+    (id: number) => () => {
+      setExpensesId(id);
+      openModal();
+    },
+    [openModal],
+  );
 
   const [categorySums, setCategorySums] = useState<Record<string, number>>({});
 
@@ -124,6 +137,10 @@ export const ExpensesList = ({ expenses, onEdit, onDelete }: ExpenseListProps) =
           )}
         </Grid>
       </Grid>
+
+      {expensesId && (
+        <ExpensesFormEditModal open={open} onClose={onClose} token={token} editId={expensesId} />
+      )}
     </div>
   );
 };
