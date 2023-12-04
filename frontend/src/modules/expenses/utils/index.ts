@@ -1,4 +1,5 @@
 import { Expense } from '../interfaces';
+import { categoryOptions } from '../constants';
 
 export const filterByDate = (
   expenses: Expense[] | Expense,
@@ -39,4 +40,9 @@ export const filterByCurrency = (
   }
 
   return !selectedCurrency || expenses.currency === selectedCurrency;
+};
+
+export const mapCategories = (category: string): string => {
+  const mapping = categoryOptions.find(mapping => mapping.value === category);
+  return mapping?.name || category;
 };

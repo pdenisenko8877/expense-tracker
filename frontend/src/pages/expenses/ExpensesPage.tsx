@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Box, Button, Typography } from '@mui/material';
@@ -10,6 +10,7 @@ import { ExpensesFormEdit } from 'src/modules/expenses/components/ExpensesFormEd
 import { ExpensesList } from 'src/modules/expenses/components/ExpensesList';
 import { ExpensesFilterForm } from 'src/modules/expenses/components/ExpensesFilterForm';
 import { Expense } from 'src/modules/expenses/interfaces';
+import { filterByCurrency, filterByDate } from 'src/modules/expenses/utils';
 import { fetchExpenses, deleteExpense } from 'src/modules/expenses/hooks/crud';
 import { useMessages } from 'src/modules/messages/hooks/useMessages';
 
@@ -20,17 +21,29 @@ export const ExpensesPage = () => {
 
   const handleLogout = useCallback(() => setToken(null), [setToken]);
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [isLoading, seIsLoading] = useState<boolean>(true);
   const [expensesId, setExpensesId] = useState<number>();
 
   // Use React Query to fetch all expenses
-  const { data, isLoading, isError } = useQuery(['allExpenses'], () => fetchExpenses(token));
+  const { data, isError } = useQuery(['allExpenses'], () => fetchExpenses(token));
+
+  const initialData = useMemo(() => {
+    if (data && !isError) {
+      seIsLoading(false);
+
+      return data.filter(
+        (expense: Expense) => filterByDate(expense) && filterByCurrency(expense, 'UAH'),
+      );
+    }
+  }, [data, isError]);
+
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
   useEffect(() => {
-    if (!isLoading && !isError) {
-      setExpenses(data);
+    if (!isLoading) {
+      setExpenses(initialData);
     }
-  }, [data, isError, isLoading]);
+  }, [initialData, isLoading]);
 
   useEffect(() => {
     if (isError) {
@@ -59,18 +72,17 @@ export const ExpensesPage = () => {
     setExpensesId(id);
   }, []);
 
-  const handleFiltered = useCallback(
-    (filteredExpenses: Expense[]) => setExpenses(filteredExpenses),
-    [],
-  );
+  const handleFiltered = useCallback((filteredExpenses: Expense[]) => {
+    setExpenses(filteredExpenses);
+  }, []);
 
   const handleReset = useCallback(
     (reset: boolean) => {
       if (reset && !isLoading && !isError) {
-        setExpenses(data);
+        setExpenses(initialData);
       }
     },
-    [data, isError, isLoading],
+    [isError, isLoading, initialData],
   );
 
   return (

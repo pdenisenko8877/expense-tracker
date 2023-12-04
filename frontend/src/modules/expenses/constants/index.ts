@@ -51,3 +51,18 @@ export const categoryOptions = [
     name: 'Транспорт',
   },
 ];
+
+export const chartBackgroundColor = [
+  '#009D89',
+  '#59C084',
+  '#A4DF78',
+  '#F9F871',
+  '#DE89AB',
+  '#B57FB1',
+  '#8677AD',
+  '#566F9E',
+  '#F89235',
+  '#00BC9D',
+  '#008953',
+  '#007A80',
+];

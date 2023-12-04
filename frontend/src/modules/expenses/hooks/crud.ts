@@ -35,7 +35,6 @@ export const fetchExpenses = async (token: Token) => {
     const response = await apiClient.get(endpoint, {
       headers: { Authorization: token },
     });
-    console.log(response);
     return response.data;
   } catch (error) {
     throw error;
