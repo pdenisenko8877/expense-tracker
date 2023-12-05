@@ -62,7 +62,7 @@ export const ExpensesFilterForm = ({ expenses, onSubmit, onReset }: ExpenseFormP
   }, [onReset, reset]);
 
   return (
-    <Paper elevation={0} sx={{ p: 3, mb: 3 }}>
+    <Paper elevation={0} sx={{ p: 3, mb: 6 }}>
       <Typography variant="h3" mb={3}>
         Фільтрувати
       </Typography>

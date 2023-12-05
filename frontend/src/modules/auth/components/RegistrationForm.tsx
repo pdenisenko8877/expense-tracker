@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Typography, Box, Stack } from '@mui/material';
+import { Button, Typography, Box, Stack, Paper } from '@mui/material';
 
 import { Text, Password } from 'src/modules/ui/forms';
 import { useMessages } from 'src/modules/messages/hooks/useMessages';
@@ -57,9 +57,9 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
   };
 
   return (
-    <Box p={2}>
+    <Paper elevation={0} sx={{ p: 3, mb: 2 }}>
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-        <Typography variant="h3" mb={3}>
+        <Typography variant="h3" mb={1}>
           Реєстрація
         </Typography>
 
@@ -76,11 +76,11 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
           />
         </Stack>
         <Box mt={3}>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" fullWidth>
             Реєстрація
           </Button>
         </Box>
       </form>
-    </Box>
+    </Paper>
   );
 };

@@ -10,9 +10,9 @@ export const LoginPage = () => {
   };
 
   return (
-    <div>
+    <>
       <LoginForm onSubmit={handleLogin} />
       <Link to="/register">Ще немає акаунту? Зареєструватися</Link>
-    </div>
+    </>
   );
 };

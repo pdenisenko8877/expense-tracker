@@ -1,6 +1,9 @@
-import { createContext, useContext, useState, ReactNode, FC } from 'react';
+import { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 import { Token } from 'src/modules/app/types';
+
+const currentTimestamp = Math.floor(Date.now() / 1000);
 
 interface AuthContextProps {
   children: ReactNode;
@@ -11,29 +14,32 @@ interface AuthContextValue {
   setToken: (token: Token) => void;
 }
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-export const AuthProvider: FC<AuthContextProps> = ({ children }) => {
+export const AuthProvider = ({ children }: AuthContextProps) => {
   const [token, setToken] = useState<Token>(localStorage.getItem('token'));
 
-  const saveToken = (token: Token) => {
+  const decodedToken = token && jwtDecode(token);
+
+  useEffect(() => {
+    if (decodedToken && decodedToken.exp) {
+      if (decodedToken.exp < currentTimestamp) {
+        setToken(null);
+      }
+    }
+  }, [decodedToken]);
+
+  const saveToken = useCallback((token: Token) => {
     setToken(token);
+
     if (token) {
       localStorage.setItem('token', token);
     } else {
       localStorage.removeItem('token');
     }
-  };
+  }, []);
 
   return (
     <AuthContext.Provider value={{ token, setToken: saveToken }}>{children}</AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

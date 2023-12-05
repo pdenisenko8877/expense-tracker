@@ -121,6 +121,14 @@ export const theme = createTheme({
               right: 5,
             },
           },
+          '& a': {
+            color: palette.primary.main,
+            textDecoration: 'none',
+
+            '&:hover': {
+              textDecoration: 'underline',
+            },
+          },
         },
       },
     },

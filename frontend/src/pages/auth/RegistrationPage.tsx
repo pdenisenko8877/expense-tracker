@@ -6,13 +6,8 @@ export const RegistrationPage = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    console.log('Registration in successfully');
     navigate('/login');
   };
 
-  return (
-    <div>
-      <RegistrationForm onSubmit={handleLogin} />
-    </div>
-  );
+  return <RegistrationForm onSubmit={handleLogin} />;
 };

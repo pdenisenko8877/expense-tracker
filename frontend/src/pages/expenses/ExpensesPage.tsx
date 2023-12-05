@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Box, Button, Typography } from '@mui/material';
 
-import { useAuth } from 'src/modules/auth/components/AuthContext';
+import { useAuth } from 'src/modules/auth/hooks/useAuth';
 import { Loader } from 'src/modules/ui/loader';
 import { ExpensesFormModal } from 'src/modules/expenses/components/ExpensesFormModal';
 import { ExpensesList } from 'src/modules/expenses/components/ExpensesList';
@@ -15,12 +15,10 @@ import { useMessages } from 'src/modules/messages/hooks/useMessages';
 import { useModal } from 'src/modules/ui/modal';
 
 export const ExpensesPage = () => {
-  const { setToken, token } = useAuth();
+  const { token } = useAuth();
   const queryClient = useQueryClient();
   const { show } = useMessages();
   const { openModal, open, onClose } = useModal();
-
-  const handleLogout = useCallback(() => setToken(null), [setToken]);
 
   const [isLoading, seIsLoading] = useState<boolean>(true);
 
@@ -82,22 +80,29 @@ export const ExpensesPage = () => {
   );
 
   return (
-    <Box px={5} py={3}>
-      <Box pb={3}>
-        <Typography variant="h3">Головна сторінка</Typography>
-        <Button onClick={handleLogout}>Вийти</Button>
-      </Box>
-
-      <Box pb={3}>
+    <>
+      <Box mb={4}>
+        <Typography variant="h2" mb={1}>
+          Вітаємо вас у Expense Tracker – вашим надійним помічником у керуванні витратами!
+        </Typography>
+        <Typography paragraph>
+          Будь-який успішний шлях до фінансового благополуччя починається з ефективного ведення
+          обліку ваших витрат. Expense Tracker - це зручний і простий у використанні інструмент,
+          який допоможе вам здійснювати контроль над вашими витратами швидко та ефективно.
+        </Typography>
+        <Typography paragraph>
+          Почніть прямо зараз та робіть свої фінанси більш контрольованими!
+        </Typography>
         <Button onClick={openModal}>Додати витрати</Button>
       </Box>
-      <ExpensesFormModal open={open} onClose={onClose} token={token} />
 
       <Loader isLoading={isLoading}>
         <ExpensesFilterForm expenses={data} onSubmit={handleFiltered} onReset={handleReset} />
 
         <ExpensesList expenses={expenses} onDelete={handleDelete} token={token} />
       </Loader>
-    </Box>
+
+      <ExpensesFormModal open={open} onClose={onClose} token={token} />
+    </>
   );
 };

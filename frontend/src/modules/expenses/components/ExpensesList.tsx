@@ -1,7 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { Stack, IconButton, List, ListItem, ListItemText, Typography, Grid } from '@mui/material';
+import {
+  Stack,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  Grid,
+  Paper,
+  Box,
+} from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
@@ -66,81 +76,89 @@ export const ExpensesList = ({ expenses, token, onDelete }: ExpenseListProps) =>
   }, [categorySums]);
 
   return (
-    <div>
-      <Typography variant="h2">Список витрат за обраний період</Typography>
-      <Typography variant="subtitle2" color="text.secondary" mb={4}>
-        За змовчуванням показано валюта "UAH" та поточний місяць. Скористуйтесь фільтром, щоб
-        отримати інші дані.
-      </Typography>
+    <>
+      <Box mb={2}>
+        <Typography variant="h2">Список витрат за обраний період</Typography>
+        <Typography variant="subtitle2" color="text.secondary">
+          За змовчуванням показано валюта "UAH" та поточний місяць. Скористуйтесь фільтром, щоб
+          отримати інші дані.
+        </Typography>
+      </Box>
 
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
-          <Doughnut data={dataChart} options={{ responsive: true }} />
-        </Grid>
+      {expenses.length > 0 ? (
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={6}>
+            <Paper elevation={0} sx={{ p: 3 }}>
+              <Doughnut data={dataChart} options={{ responsive: true }} />
+            </Paper>
+          </Grid>
 
-        <Grid item xs={12} md={6}>
-          {expenses.length > 0 ? (
-            <List dense>
-              {expenses.map(expense => (
-                <ListItem
-                  key={expense.id}
-                  sx={{
-                    '&:not(:last-of-type)': {
-                      borderBottom: theme => `1px solid ${theme.palette.grey[300]}`,
-                    },
-                  }}
-                  secondaryAction={
-                    <Stack direction="row" spacing={0.5}>
-                      <IconButton edge="end" color="info" onClick={handleEdit(expense.id!)}>
-                        <EditOutlinedIcon />
-                      </IconButton>
-                      <IconButton edge="end" color="error" onClick={handleDelete(expense.id!)}>
-                        <DeleteOutlinedIcon />
-                      </IconButton>
-                    </Stack>
-                  }>
-                  <ListItemText
-                    primary={
-                      <>
-                        Витратили:
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                          pl={1}
-                          fontWeight={700}>
-                          {expense.amount} {expense.currency}
-                        </Typography>
-                      </>
-                    }
-                    secondary={
-                      <>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                          pr={1}
-                          fontWeight={500}>
-                          Категорія: {mapCategories(expense.category)}
-                        </Typography>
-                        {`Дата: ${new Date(expense.date).toLocaleDateString()}`}
-                      </>
-                    }
-                  />
-                </ListItem>
-              ))}
-            </List>
-          ) : (
-            <Typography variant="body2" color="text.secondary">
-              Витрат не знайдено. Змініть фільтр або додайте видатки
-            </Typography>
-          )}
+          <Grid item xs={12} md={6}>
+            <Paper elevation={0} sx={{ p: 3, height: '100%', maxHeight: 570, overflow: 'auto' }}>
+              <List dense>
+                {expenses.map(expense => (
+                  <ListItem
+                    key={expense.id}
+                    sx={{
+                      '&:not(:last-of-type)': {
+                        borderBottom: theme => `1px solid ${theme.palette.grey[300]}`,
+                      },
+                    }}
+                    secondaryAction={
+                      <Stack direction="row" spacing={0.5}>
+                        <IconButton edge="end" color="info" onClick={handleEdit(expense.id!)}>
+                          <EditOutlinedIcon />
+                        </IconButton>
+                        <IconButton edge="end" color="error" onClick={handleDelete(expense.id!)}>
+                          <DeleteOutlinedIcon />
+                        </IconButton>
+                      </Stack>
+                    }>
+                    <ListItemText
+                      primary={
+                        <>
+                          Витратили:
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                            pl={1}
+                            fontWeight={700}>
+                            {expense.amount} {expense.currency}
+                          </Typography>
+                        </>
+                      }
+                      secondary={
+                        <>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                            pr={1}
+                            fontWeight={500}>
+                            Категорія: {mapCategories(expense.category)}
+                          </Typography>
+                          {`Дата: ${new Date(expense.date).toLocaleDateString()}`}
+                        </>
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      ) : (
+        <Paper elevation={0} sx={{ p: 3 }}>
+          <Typography variant="body2" color="text.secondary">
+            Витрат не знайдено. Змініть фільтр або додайте витрати
+          </Typography>
+        </Paper>
+      )}
 
       {expensesId && (
         <ExpensesFormEditModal open={open} onClose={onClose} token={token} editId={expensesId} />
       )}
-    </div>
+    </>
   );
 };

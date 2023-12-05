@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Typography, Box, Stack } from '@mui/material';
+import { Button, Typography, Box, Stack, Paper } from '@mui/material';
 
 import { Text, Password } from 'src/modules/ui/forms';
 import { useMessages } from 'src/modules/messages/hooks/useMessages';
+import { useAuth } from 'src/modules/auth/hooks/useAuth';
 
-import { useAuth } from './AuthContext';
 import { AuthData } from '../interfaces';
 import { authLogin } from '../hooks/crud';
 
@@ -59,9 +59,9 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
   );
 
   return (
-    <Box p={2}>
+    <Paper elevation={0} sx={{ p: 3, mb: 2 }}>
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-        <Typography variant="h3" mb={3}>
+        <Typography variant="h3" mb={1}>
           Вхід
         </Typography>
         <Stack spacing={3}>
@@ -70,9 +70,11 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
         </Stack>
 
         <Box mt={3}>
-          <Button type="submit">Увійти</Button>
+          <Button type="submit" fullWidth>
+            Увійти
+          </Button>
         </Box>
       </form>
-    </Box>
+    </Paper>
   );
 };
